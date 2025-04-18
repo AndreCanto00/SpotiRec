@@ -33,16 +33,16 @@ def main():
     
     # Load the synthetic data
     try:
-        tracks_df = pd.read_csv("/app/synthetic_streaming_data.csv")
+        tracks_df = pd.read_csv("/workspaces/SpotiRec/data/data.csv")
         print(f"Tracks dataset loaded with shape: {tracks_df.shape}")
         
         # Store all tracks in Redis for reference
         all_tracks = []
         for _, row in tracks_df.iterrows():
             track_info = {
-                'id': row['track_id'],
-                'name': row['track_name'],
-                'artist': row['artist'],
+                'id': row['id'],
+                'name': row['name'],
+                'artist': row['artists'],
                 'album': row.get('album', ''),
                 'genre': row.get('genre', '')
             }
