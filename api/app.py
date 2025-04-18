@@ -21,7 +21,7 @@ fallbacks_used = metrics.counter(
 )
 
 # Connect to Redis
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_host = os.environ.get('REDIS_HOST', 'localhost') # Db utilized for cache and data store
 r = redis.Redis(host=redis_host, port=6379, db=0)
 
 # Wait for Redis to be available
@@ -75,7 +75,7 @@ def track_listened():
     track_id = data['track_id']
     
     # Check if we have personalized recommendations in the cache
-    user_preferences = r.get(f"prefs:{user_id}")
+    user_preferences = r.get(f"prefs:{user_id}") # User preferences stored in Redis
     
     if user_preferences:
         # Use existing preferences to generate a recommendation
@@ -92,9 +92,9 @@ def track_listened():
             predicted_next = random.choice(FALLBACK_TRACKS)
     
     # Store the prediction in Redis
-    r.set(f"rec:{user_id}", predicted_next)
+    r.set(f"rec:{user_id}", predicted_next) #Memorization of the recommendation
     
-    # Store listen history (limited to last 100 tracks)
+    # Store listen history (limited to last 100 tracks), chronology of listening
     r.lpush(f"history:{user_id}", track_id)
     r.ltrim(f"history:{user_id}", 0, 99)
     
@@ -138,7 +138,7 @@ def recommend(user_id):
         "cache_hit": cache_hit,
         "fallback_used": fallback_used if not cache_hit else False
     })
-
+# Endpoint to get a user's listening history.
 @app.route('/history/<user_id>', methods=['GET'])
 def get_history(user_id):
     """Get listening history for a user"""
@@ -152,7 +152,7 @@ def get_history(user_id):
         "user_id": user_id,
         "history": history
     })
-
+# Endpoint to get a user's listening history # Endpoint to get popular tracks (fallback)
 @app.route('/popular', methods=['GET'])
 def get_popular():
     """Get popular tracks (fallbacks)"""
