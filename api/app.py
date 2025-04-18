@@ -57,6 +57,13 @@ def health_check():
         "redis": redis_status
     })
 
+@app.route('/', methods=['GET'])
+def home():
+    """Home endpoint"""
+    return jsonify({
+        "message": "Welcome to SpotiRec API!"
+    })
+
 @app.route('/listened', methods=['POST'])
 def track_listened():
     """Record that a user listened to a track"""
@@ -163,6 +170,6 @@ def get_popular():
 if __name__ == '__main__':
     # Wait for Redis before starting the app
     if wait_for_redis():
-        app.run(host='0.0.0.0', port=5000)
+        app.run(host='127.0.0.1', port=5000)
     else:
         print("Exiting due to Redis connection failure")

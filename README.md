@@ -13,3 +13,5 @@ curl http://localhost:5000/history/U10
 
 # Ottieni i brani più popolari
 curl http://localhost:5000/popular
+
+docker-compose up -d
