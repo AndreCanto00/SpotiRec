@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  flask-api:
+    build: ./flask-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask-api:/app
+    depends_on:
+      - redis
+      - spark-ml
+    environment:
+      - FLASK_ENV=development
+      - REDIS_HOST=redis
+      - SPARK_HOST=spark-ml
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  spark-ml:
+    build: ./spark-ml
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./spark-ml:/app
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+  redis-data:
+  grafana-data:
