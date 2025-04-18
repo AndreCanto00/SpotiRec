@@ -3,8 +3,8 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Install Java for PySpark
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-11-jre-headless && \
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends openjdk-17-jre-headless && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
