@@ -57,6 +57,13 @@ def health_check():
         "redis": redis_status
     })
 
+@app.route('/', methods=['GET'])
+def home():
+    """Home endpoint"""
+    return jsonify({
+        "message": "Welcome to SpotiRec API!"
+    })
+
 @app.route('/listened', methods=['POST'])
 def track_listened():
     """Record that a user listened to a track"""
@@ -68,7 +75,7 @@ def track_listened():
     track_id = data['track_id']
     
     # Check if we have personalized recommendations in the cache
-    user_preferences = r.get(f"prefs:{user_id}")
+    user_preferences = r.get(f"prefs:{user_id}") # User preferences stored in Redis
     
     if user_preferences:
         # Use existing preferences to generate a recommendation
@@ -145,7 +152,7 @@ def get_history(user_id):
         "user_id": user_id,
         "history": history
     })
-# Endpoint to get popular tracks (fallback)
+# Endpoint to get a user's listening history # Endpoint to get popular tracks (fallback)
 @app.route('/popular', methods=['GET'])
 def get_popular():
     """Get popular tracks (fallbacks)"""
@@ -163,6 +170,6 @@ def get_popular():
 if __name__ == '__main__':
     # Wait for Redis before starting the app
     if wait_for_redis():
-        app.run(host='0.0.0.0', port=5000)
+        app.run(host='0.0.0.0', port=5050)
     else:
         print("Exiting due to Redis connection failure")
