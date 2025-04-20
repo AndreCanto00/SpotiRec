@@ -1,7 +1,0 @@
-flask==2.0.1
-redis==3.5.3
-requests==2.31.0
-prometheus-flask-exporter==0.18.0
-pandas
-numpy
-werkzeug==2.0.3
