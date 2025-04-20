@@ -145,7 +145,7 @@ def get_history(user_id):
         "user_id": user_id,
         "history": history
     })
-# Endpoint to get a user's listening history # Endpoint to get popular tracks (fallback)
+# Endpoint to get popular tracks (fallback)
 @app.route('/popular', methods=['GET'])
 def get_popular():
     """Get popular tracks (fallbacks)"""
