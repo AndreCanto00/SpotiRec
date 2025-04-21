@@ -1,4 +1,4 @@
-# SpotiRec
+# SpotiRec - Still Working on it
 
 # Registra che un utente ha ascoltato un brano
 curl -X POST http://localhost:5000/listened \
